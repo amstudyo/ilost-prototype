@@ -38,6 +38,11 @@ font_data = ExtResource( 11 )
 [node name="BarzakhWorld" type="Node2D"]
 script = ExtResource( 1 )
 
+[node name="CenterContainer" type="CenterContainer" parent="."]
+margin_right = 944.0
+margin_bottom = 480.0
+use_top_left = true
+
 [node name="MidWorld" type="TextureRect" parent="."]
 margin_right = 1024.0
 margin_bottom = 592.0
@@ -57,17 +62,16 @@ margin_bottom = 352.0
 texture = ExtResource( 12 )
 
 [node name="LightEffect_Timer" type="Timer" parent="LightEffect"]
-wait_time = 0.1
+wait_time = 0.05
 
-[node name="LightEffect_Distroy" type="Timer" parent="LightEffect"]
-wait_time = 5.0
+[node name="LE_destroyer_timer" type="Timer" parent="LightEffect"]
+wait_time = 3.0
 
 [node name="Kheir" type="AnimatedSprite" parent="."]
 position = Vector2( 256, 264 )
 scale = Vector2( 0.427778, 0.427778 )
 frames = SubResource( 1 )
 animation = "Kheir_animation"
-frame = 2
 playing = true
 offset = Vector2( -82.6948, 99.1559 )
 
@@ -76,7 +80,7 @@ position = Vector2( 93.5065, 149.61 )
 scale = Vector2( 0.703154, 0.703154 )
 frames = SubResource( 1 )
 animation = "Kheir_animation"
-frame = 1
+frame = 2
 playing = true
 offset = Vector2( -24.5185, 35.8972 )
 flip_h = true
@@ -86,7 +90,6 @@ position = Vector2( 243.117, 187.013 )
 scale = Vector2( 0.494426, 0.494426 )
 frames = SubResource( 1 )
 animation = "Kheir_animation"
-frame = 2
 playing = true
 offset = Vector2( -24.5185, 35.8972 )
 
@@ -94,7 +97,6 @@ offset = Vector2( -24.5185, 35.8972 )
 position = Vector2( 808, 288 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 2 )
-frame = 1
 playing = true
 flip_h = true
 
@@ -105,7 +107,10 @@ normal = ExtResource( 8 )
 action = "Kheir_Ability_Hide"
 
 [node name="Ability_Hide_timer" type="Timer" parent="Ability_Hide"]
-wait_time = 2.0
+wait_time = 1.5
+
+[node name="Ability_hide_usable_timer" type="Timer" parent="Ability_Hide"]
+wait_time = 3.0
 
 [node name="Ability_Thunder" type="TouchScreenButton" parent="."]
 position = Vector2( 848, 432 )
@@ -128,7 +133,6 @@ margin_top = 24.0
 margin_right = 312.0
 margin_bottom = 96.0
 custom_fonts/font = SubResource( 3 )
-text = "0"
 
 [node name="Damage_Recevied" type="Label" parent="."]
 margin_left = 352.0
@@ -136,7 +140,6 @@ margin_top = 24.0
 margin_right = 640.0
 margin_bottom = 96.0
 custom_fonts/font = SubResource( 3 )
-text = "0"
 
 [node name="I_Lost" type="TouchScreenButton" parent="."]
 position = Vector2( 776, 24 )
@@ -151,9 +154,10 @@ texture = ExtResource( 9 )
 stretch_mode = 7
 
 [connection signal="timeout" from="LightEffect/LightEffect_Timer" to="." method="_on_LightEffect_Timer_timeout"]
-[connection signal="timeout" from="LightEffect/LightEffect_Distroy" to="." method="_on_LightEffect_Distroy_timeout"]
+[connection signal="timeout" from="LightEffect/LE_destroyer_timer" to="." method="_on_LE_destroyer_timer_timeout"]
 [connection signal="pressed" from="Ability_Hide" to="." method="_on_Ability_Hide_pressed"]
 [connection signal="timeout" from="Ability_Hide/Ability_Hide_timer" to="." method="_on_Ability_Hide_timer_timeout"]
+[connection signal="timeout" from="Ability_Hide/Ability_hide_usable_timer" to="." method="_on_Ability_hide_usable_timer_timeout"]
 [connection signal="pressed" from="Ability_Thunder" to="." method="_on_Ability_Thunder_pressed"]
 [connection signal="timeout" from="Ability_Thunder/Ability_Thunder_Timer" to="." method="_on_Ability_Thunder_Timer_timeout"]
 [connection signal="pressed" from="Ability_LightEffect" to="." method="_on_Ability_LightEffect_pressed"]
