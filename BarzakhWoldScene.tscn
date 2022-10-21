@@ -1,0 +1,160 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://MainScript.gd" type="Script" id=1]
+[ext_resource path="res://map/MidWorld.jpg" type="Texture" id=2]
+[ext_resource path="res://characters/kheir/kheir2.png" type="Texture" id=3]
+[ext_resource path="res://characters/kheir/kheir3.png" type="Texture" id=4]
+[ext_resource path="res://characters/kheir/kheir.png" type="Texture" id=5]
+[ext_resource path="res://characters/shar/shar1.png" type="Texture" id=6]
+[ext_resource path="res://characters/shar/shar2.png" type="Texture" id=7]
+[ext_resource path="res://buttons/ability1.png" type="Texture" id=8]
+[ext_resource path="res://Effect/Thunder.jpg" type="Texture" id=9]
+[ext_resource path="res://buttons/ILostBTN.png" type="Texture" id=10]
+[ext_resource path="res://SCRIPTBL.TTF" type="DynamicFontData" id=11]
+[ext_resource path="res://Effect/LightEffect.png" type="Texture" id=12]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 5 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "Kheir_animation",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 6 ), ExtResource( 7 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="DynamicFont" id=3]
+size = 50
+outline_size = 1
+outline_color = Color( 0.639216, 0.137255, 0.137255, 1 )
+font_data = ExtResource( 11 )
+
+[node name="BarzakhWorld" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="MidWorld" type="TextureRect" parent="."]
+margin_right = 1024.0
+margin_bottom = 592.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 7
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="LightEffect" type="TextureRect" parent="."]
+visible = false
+margin_left = 184.0
+margin_top = 288.0
+margin_right = 248.0
+margin_bottom = 352.0
+texture = ExtResource( 12 )
+
+[node name="LightEffect_Timer" type="Timer" parent="LightEffect"]
+wait_time = 0.1
+
+[node name="LightEffect_Distroy" type="Timer" parent="LightEffect"]
+wait_time = 5.0
+
+[node name="Kheir" type="AnimatedSprite" parent="."]
+position = Vector2( 256, 264 )
+scale = Vector2( 0.427778, 0.427778 )
+frames = SubResource( 1 )
+animation = "Kheir_animation"
+frame = 2
+playing = true
+offset = Vector2( -82.6948, 99.1559 )
+
+[node name="Kheir_Child1" type="AnimatedSprite" parent="Kheir"]
+position = Vector2( 93.5065, 149.61 )
+scale = Vector2( 0.703154, 0.703154 )
+frames = SubResource( 1 )
+animation = "Kheir_animation"
+frame = 1
+playing = true
+offset = Vector2( -24.5185, 35.8972 )
+flip_h = true
+
+[node name="Kheir_Child2" type="AnimatedSprite" parent="Kheir"]
+position = Vector2( 243.117, 187.013 )
+scale = Vector2( 0.494426, 0.494426 )
+frames = SubResource( 1 )
+animation = "Kheir_animation"
+frame = 2
+playing = true
+offset = Vector2( -24.5185, 35.8972 )
+
+[node name="Shar" type="AnimatedSprite" parent="."]
+position = Vector2( 808, 288 )
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 2 )
+frame = 1
+playing = true
+flip_h = true
+
+[node name="Ability_Hide" type="TouchScreenButton" parent="."]
+position = Vector2( 24, 416 )
+scale = Vector2( 0.275862, 0.275862 )
+normal = ExtResource( 8 )
+action = "Kheir_Ability_Hide"
+
+[node name="Ability_Hide_timer" type="Timer" parent="Ability_Hide"]
+wait_time = 2.0
+
+[node name="Ability_Thunder" type="TouchScreenButton" parent="."]
+position = Vector2( 848, 432 )
+scale = Vector2( 0.275862, 0.275862 )
+normal = ExtResource( 8 )
+action = "Kheir_Ability_Thunder"
+
+[node name="Ability_Thunder_Timer" type="Timer" parent="Ability_Thunder"]
+wait_time = 0.3
+
+[node name="Ability_LightEffect" type="TouchScreenButton" parent="."]
+position = Vector2( 144, 448 )
+scale = Vector2( 0.275862, 0.275862 )
+normal = ExtResource( 8 )
+action = "Kheir_Ability_LightEffect"
+
+[node name="Damage_Done" type="Label" parent="."]
+margin_left = 24.0
+margin_top = 24.0
+margin_right = 312.0
+margin_bottom = 96.0
+custom_fonts/font = SubResource( 3 )
+text = "0"
+
+[node name="Damage_Recevied" type="Label" parent="."]
+margin_left = 352.0
+margin_top = 24.0
+margin_right = 640.0
+margin_bottom = 96.0
+custom_fonts/font = SubResource( 3 )
+text = "0"
+
+[node name="I_Lost" type="TouchScreenButton" parent="."]
+position = Vector2( 776, 24 )
+scale = Vector2( 0.53202, 0.172414 )
+normal = ExtResource( 10 )
+
+[node name="Thunder" type="TextureRect" parent="."]
+visible = false
+margin_right = 1980.0
+margin_bottom = 1080.0
+texture = ExtResource( 9 )
+stretch_mode = 7
+
+[connection signal="timeout" from="LightEffect/LightEffect_Timer" to="." method="_on_LightEffect_Timer_timeout"]
+[connection signal="timeout" from="LightEffect/LightEffect_Distroy" to="." method="_on_LightEffect_Distroy_timeout"]
+[connection signal="pressed" from="Ability_Hide" to="." method="_on_Ability_Hide_pressed"]
+[connection signal="timeout" from="Ability_Hide/Ability_Hide_timer" to="." method="_on_Ability_Hide_timer_timeout"]
+[connection signal="pressed" from="Ability_Thunder" to="." method="_on_Ability_Thunder_pressed"]
+[connection signal="timeout" from="Ability_Thunder/Ability_Thunder_Timer" to="." method="_on_Ability_Thunder_Timer_timeout"]
+[connection signal="pressed" from="Ability_LightEffect" to="." method="_on_Ability_LightEffect_pressed"]
+[connection signal="pressed" from="I_Lost" to="." method="_on_I_Lost_pressed"]
