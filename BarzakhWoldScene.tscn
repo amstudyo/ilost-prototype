@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://MainScript.gd" type="Script" id=1]
 [ext_resource path="res://map/MidWorld.jpg" type="Texture" id=2]
@@ -12,6 +12,8 @@
 [ext_resource path="res://buttons/ILostBTN.png" type="Texture" id=10]
 [ext_resource path="res://SCRIPTBL.TTF" type="DynamicFontData" id=11]
 [ext_resource path="res://Effect/LightEffect.png" type="Texture" id=12]
+[ext_resource path="res://Effect/fire/fire.jpg" type="Texture" id=13]
+[ext_resource path="res://Effect/dark_wood/dark_wood.jpg" type="Texture" id=14]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -34,6 +36,22 @@ size = 50
 outline_size = 1
 outline_color = Color( 0.639216, 0.137255, 0.137255, 1 )
 font_data = ExtResource( 11 )
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 13 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 14 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+} ]
 
 [node name="BarzakhWorld" type="Node2D"]
 script = ExtResource( 1 )
@@ -76,8 +94,8 @@ playing = true
 offset = Vector2( -82.6948, 99.1559 )
 
 [node name="Kheir_Child1" type="AnimatedSprite" parent="Kheir"]
-position = Vector2( 93.5065, 149.61 )
-scale = Vector2( 0.703154, 0.703154 )
+position = Vector2( 93.507, 187.013 )
+scale = Vector2( 0.494, 0.494 )
 frames = SubResource( 1 )
 animation = "Kheir_animation"
 frame = 2
@@ -97,8 +115,15 @@ offset = Vector2( -24.5185, 35.8972 )
 position = Vector2( 808, 288 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 2 )
+frame = 1
 playing = true
 flip_h = true
+
+[node name="Random_Ability_Timer" type="Timer" parent="Shar"]
+wait_time = 1.5
+
+[node name="Shar_Invert_Timer" type="Timer" parent="Shar"]
+wait_time = 2.0
 
 [node name="Ability_Hide" type="TouchScreenButton" parent="."]
 position = Vector2( 24, 416 )
@@ -107,10 +132,10 @@ normal = ExtResource( 8 )
 action = "Kheir_Ability_Hide"
 
 [node name="Ability_Hide_timer" type="Timer" parent="Ability_Hide"]
-wait_time = 1.5
+wait_time = 2.7
 
 [node name="Ability_hide_usable_timer" type="Timer" parent="Ability_Hide"]
-wait_time = 3.0
+wait_time = 4.0
 
 [node name="Ability_Thunder" type="TouchScreenButton" parent="."]
 position = Vector2( 848, 432 )
@@ -120,6 +145,9 @@ action = "Kheir_Ability_Thunder"
 
 [node name="Ability_Thunder_Timer" type="Timer" parent="Ability_Thunder"]
 wait_time = 0.3
+
+[node name="Ability_Thunder_btn_Timer" type="Timer" parent="Ability_Thunder"]
+wait_time = 3.0
 
 [node name="Ability_LightEffect" type="TouchScreenButton" parent="."]
 position = Vector2( 144, 448 )
@@ -146,8 +174,40 @@ position = Vector2( 776, 24 )
 scale = Vector2( 0.53202, 0.172414 )
 normal = ExtResource( 10 )
 
+[node name="Fire" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 240, 304 )
+scale = Vector2( 0.62, 0.62 )
+frames = SubResource( 4 )
+
+[node name="Fire_Destroy_Timer" type="Timer" parent="Fire"]
+wait_time = 1.5
+
+[node name="DarkWood" type="AnimatedSprite" parent="."]
+visible = false
+position = Vector2( 242, 305 )
+scale = Vector2( 0.62, 0.62 )
+frames = SubResource( 5 )
+
+[node name="DarkWood_Destroy_Timer" type="Timer" parent="DarkWood"]
+wait_time = 2.0
+
+[node name="Unbound_Child1" type="TouchScreenButton" parent="."]
+visible = false
+position = Vector2( 760, 432 )
+scale = Vector2( 0.254, 0.254 )
+normal = ExtResource( 5 )
+
+[node name="Unbound_Child2" type="TouchScreenButton" parent="."]
+visible = false
+position = Vector2( 674, 432 )
+scale = Vector2( 0.253968, 0.253968 )
+normal = ExtResource( 5 )
+
 [node name="Thunder" type="TextureRect" parent="."]
 visible = false
+margin_left = 6.10352e-05
+margin_top = 6.10352e-05
 margin_right = 1980.0
 margin_bottom = 1080.0
 texture = ExtResource( 9 )
@@ -155,10 +215,17 @@ stretch_mode = 7
 
 [connection signal="timeout" from="LightEffect/LightEffect_Timer" to="." method="_on_LightEffect_Timer_timeout"]
 [connection signal="timeout" from="LightEffect/LE_destroyer_timer" to="." method="_on_LE_destroyer_timer_timeout"]
+[connection signal="timeout" from="Shar/Random_Ability_Timer" to="." method="_on_Random_Ability_Timer_timeout"]
+[connection signal="timeout" from="Shar/Shar_Invert_Timer" to="." method="_on_Shar_Invert_Timer_timeout"]
 [connection signal="pressed" from="Ability_Hide" to="." method="_on_Ability_Hide_pressed"]
 [connection signal="timeout" from="Ability_Hide/Ability_Hide_timer" to="." method="_on_Ability_Hide_timer_timeout"]
 [connection signal="timeout" from="Ability_Hide/Ability_hide_usable_timer" to="." method="_on_Ability_hide_usable_timer_timeout"]
 [connection signal="pressed" from="Ability_Thunder" to="." method="_on_Ability_Thunder_pressed"]
 [connection signal="timeout" from="Ability_Thunder/Ability_Thunder_Timer" to="." method="_on_Ability_Thunder_Timer_timeout"]
+[connection signal="timeout" from="Ability_Thunder/Ability_Thunder_btn_Timer" to="." method="_on_Ability_Thunder_btn_Timer_timeout"]
 [connection signal="pressed" from="Ability_LightEffect" to="." method="_on_Ability_LightEffect_pressed"]
 [connection signal="pressed" from="I_Lost" to="." method="_on_I_Lost_pressed"]
+[connection signal="timeout" from="Fire/Fire_Destroy_Timer" to="." method="_on_Fire_Destroy_Timer_timeout"]
+[connection signal="timeout" from="DarkWood/DarkWood_Destroy_Timer" to="." method="_on_DarkWood_Destroy_Timer_timeout"]
+[connection signal="pressed" from="Unbound_Child1" to="." method="_on_Unbound_Child1_pressed"]
+[connection signal="pressed" from="Unbound_Child2" to="." method="_on_Unbound_Child2_pressed"]
