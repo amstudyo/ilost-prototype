@@ -9,6 +9,7 @@ var child2_bounded = 0
 
 func _ready():
 	var ViewPortSize = get_viewport().size
+	var ViewPortSizeXshar = get_viewport().size.x-(get_viewport().size.x/4)
 	var ViewPortSizeX = get_viewport().size.x - 300
 	var ViewPortSizeY = get_viewport().size.y - 160
 	get_node("MidWorld").set_size(ViewPortSize)
@@ -20,11 +21,11 @@ func _ready():
 	get_node("Ability_Thunder").set_position(Vector2(ViewPortSizeX+100,ViewPortSizeY))
 	get_node("Unbound_Child1").set_position(Vector2(ViewPortSizeX,ViewPortSizeY))
 	get_node("Unbound_Child2").set_position(Vector2(ViewPortSizeX-80,ViewPortSizeY))
-	get_node("Kheir").set_position(Vector2(300,get_viewport().size.y/2-20))
-	get_node("LightEffect").set_position(Vector2(300,get_viewport().size.y/2-20))
-	get_node("Shar").set_position(Vector2(get_viewport().size.x - 300,get_viewport().size.y/2-20))
-	get_node("DarkWood").set_position(Vector2(300,get_viewport().size.y/2+30))
-	get_node("Fire").set_position(Vector2(300,get_viewport().size.y/2+50))
+	get_node("Kheir").set_position(Vector2(get_viewport().size.x/4,get_viewport().size.y/2-20))
+	get_node("LightEffect").set_position(Vector2(get_viewport().size.x/4,get_viewport().size.y/2-20))
+	get_node("Shar").set_position(Vector2(ViewPortSizeXshar,get_viewport().size.y/2-20))
+	get_node("DarkWood").set_position(Vector2(get_viewport().size.x/4,get_viewport().size.y/2+30))
+	get_node("Fire").set_position(Vector2(get_viewport().size.x/4,get_viewport().size.y/2+50))
 	#AI
 	get_node("Shar/Random_Ability_Timer").start()
 	pass
@@ -41,6 +42,7 @@ func _on_Ability_Hide_pressed():
 	get_node("Kheir").visible = false
 	get_node("Ability_Hide").visible = false
 	kheir_shield = 1
+	get_node("Kheir/hide_audio").play()
 	pass
 func _on_Ability_Hide_timer_timeout():
 	get_node("Kheir").visible = true
@@ -50,6 +52,7 @@ func _on_Ability_hide_usable_timer_timeout():
 	get_node("Ability_Hide").visible = true
 	get_node("Ability_Hide/Ability_Hide_timer").stop()
 	get_node("Ability_Hide/Ability_hide_usable_timer").stop()
+	get_node("Kheir/thunder_audio").stop()
 	pass
 
 #Kheir Ability: Thunder
@@ -60,6 +63,7 @@ func _on_Ability_Thunder_pressed():
 	get_node("Ability_Thunder").visible = false
 	if shar_shield == 0:
 		Kheir_dmg()
+	get_node("Kheir/thunder_audio").play()
 	pass
 func _on_Ability_Thunder_Timer_timeout():
 	get_node("Thunder").visible = false
@@ -68,6 +72,7 @@ func _on_Ability_Thunder_btn_Timer_timeout():
 	get_node("Ability_Thunder/Ability_Thunder_Timer").stop()
 	get_node("Ability_Thunder/Ability_Thunder_btn_Timer").stop()
 	get_node("Ability_Thunder").visible = true
+	get_node("Kheir/thunder_audio").stop()
 	pass
 #Kheir Ability: LightEffect
 func _on_Ability_LightEffect_pressed():
@@ -78,6 +83,7 @@ func _on_Ability_LightEffect_pressed():
 	get_node("Ability_LightEffect").visible = false
 	get_node("LightEffect/LightEffect_Timer").start()
 	get_node("LightEffect/LE_destroyer_timer").start()
+	get_node("Kheir/Wind_audio").play()
 	pass
 func _on_LightEffect_Timer_timeout():
 	var LightEffectPos = get_node("LightEffect").get_position()
@@ -89,6 +95,7 @@ func _on_LE_destroyer_timer_timeout():
 	get_node("LightEffect/LE_destroyer_timer").stop()
 	get_node("LightEffect").visible = false
 	get_node("Ability_LightEffect").visible = true
+	get_node("Kheir/Wind_audio").stop()
 	pass
 
 #Kheir Ability: Unbound Child1
@@ -139,10 +146,12 @@ func Shar_Fire():
 	if kheir_shield == 0:
 		damage_received = damage_received + 3
 		get_node("Damage_Recevied").text = str(damage_received)
+	get_node("Shar/fire_audio").play()
 	pass
 func _on_Fire_Destroy_Timer_timeout():
 	get_node("Fire").visible = false
 	get_node("Fire/Fire_Destroy_Timer").stop()
+	get_node("Shar/fire_audio").stop()
 	pass
 func Shar_DarkWood():
 	get_node("DarkWood").visible = true
@@ -150,22 +159,27 @@ func Shar_DarkWood():
 	if kheir_shield == 0:
 		damage_received = damage_received + 3
 		get_node("Damage_Recevied").text = str(damage_received)
+	get_node("Shar/Wood_audio").play()
 	pass
 func _on_DarkWood_Destroy_Timer_timeout():
 	get_node("DarkWood").visible = false
 	get_node("DarkWood/DarkWood_Destroy_Timer").stop()
+	get_node("Shar/invert_audio").stop()
 	pass
 func Shar_Invert():
 	get_node("Shar").flip_v = true
 	get_node("Shar").set_position(Vector2(get_viewport().size.x - 300,get_viewport().size.y/5))
 	shar_shield = 1
 	get_node("Shar/Shar_Invert_Timer").start()
+	get_node("Shar/invert_audio").play()
 	pass
 func _on_Shar_Invert_Timer_timeout():
+	var ViewPortSizeXshar = get_viewport().size.x-(get_viewport().size.x/4)
 	get_node("Shar").flip_v = false
-	get_node("Shar").set_position(Vector2(get_viewport().size.x - 300,get_viewport().size.y/2-20))
+	get_node("Shar").set_position(Vector2(ViewPortSizeXshar,get_viewport().size.y/2-20))
 	shar_shield = 0
 	get_node("Shar/Shar_Invert_Timer").stop()
+	get_node("Shar/invert_audio").stop()
 	pass
 func Shar_Thief_Child1():
 	get_node("Kheir/Kheir_Child1").set_position(Vector2(get_viewport().size.x/2,get_viewport().size.y/2-20))
