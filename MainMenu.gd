@@ -1,7 +1,12 @@
 extends Node2D
 
+const SAVE_DIR = 'user://saves'
+var save_path = SAVE_DIR + "save.dat"
+var highscore = 0
+
 func _ready():
-	get_node("PlayVsAi").set_position(Vector2(get_viewport().size.x/3,100))
+	LoadData()
+	get_node("PlayVsAi").set_position(Vector2(get_viewport().size.x/3,150))
 	pass
 
 func _on_PlayVsAi_pressed():
@@ -13,5 +18,15 @@ func _on_Quit_pressed():
 	pass
 
 func _on_Amstudyo_pressed():
-	OS.shell_open('https://amstudyo.com')
+	OS.shell_open('https://ilost.amstudyo.com')
+	pass
+
+func LoadData():
+	var file = File.new()
+	if file.file_exists(save_path):
+		var file_error_check = file.open(save_path,File.READ)
+		var player_data = file.get_var()
+		file.close()
+		highscore = player_data
+	get_node("PlayVsAi/HighScore").text = str(highscore)
 	pass

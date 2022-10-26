@@ -6,6 +6,8 @@ var kheir_shield = 0
 var shar_shield = 0
 var child1_bounded = 0
 var child2_bounded = 0
+const SAVE_DIR = 'user://saves'
+var save_path = SAVE_DIR + "save.dat"
 
 func _ready():
 	var ViewPortSize = get_viewport().size
@@ -32,6 +34,31 @@ func _ready():
 
 #GAME OVER
 func _on_I_Lost_pressed():
+	var highscore = 0
+	highscore = int(get_node("Damage_Done").text) - int(get_node("Damage_Recevied").text)
+	if highscore <= 0:
+		highscore = 0
+	
+	#load to compare old and new score
+	var file = File.new()
+	if file.file_exists(save_path):
+		var file_error_check = file.open(save_path,File.READ)
+		var player_data = file.get_var()
+		file.close()
+		if highscore <= player_data:
+			highscore = player_data
+	#load comparing ends here
+	
+	var data = highscore
+	var dir = Directory.new()
+	if !dir.dir_exists(SAVE_DIR):
+		dir.make_dir_recursive(SAVE_DIR)
+	
+	var file2 = File.new()
+	var file_error_check = file2.open(save_path,File.WRITE)
+	if file_error_check == OK:
+		file2.store_var(data)
+		file2.close()
 	get_tree().change_scene("res://MainMenu.tscn")
 	pass
 

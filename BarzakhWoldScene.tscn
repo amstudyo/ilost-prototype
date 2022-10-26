@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://MainScript.gd" type="Script" id=1]
 [ext_resource path="res://map/MidWorld.jpg" type="Texture" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://sounds/invert.wav" type="AudioStream" id=19]
 [ext_resource path="res://sounds/woods.wav" type="AudioStream" id=20]
 [ext_resource path="res://sounds/thief.wav" type="AudioStream" id=21]
+[ext_resource path="res://sounds/ILost-Soundtrack1.mp3" type="AudioStream" id=22]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -133,7 +134,6 @@ stream = ExtResource( 17 )
 position = Vector2( 840.375, 230.066 )
 scale = Vector2( 0.727193, 0.727193 )
 frames = SubResource( 2 )
-frame = 1
 playing = true
 flip_h = true
 
@@ -242,6 +242,10 @@ margin_right = 1980.0
 margin_bottom = 1080.0
 texture = ExtResource( 9 )
 stretch_mode = 7
+
+[node name="SoundTrackPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 22 )
+autoplay = true
 
 [connection signal="timeout" from="LightEffect/LightEffect_Timer" to="." method="_on_LightEffect_Timer_timeout"]
 [connection signal="timeout" from="LightEffect/LE_destroyer_timer" to="." method="_on_LE_destroyer_timer_timeout"]
